@@ -12,26 +12,11 @@ class NivelCriticidad(str, Enum):
 
 class EntidadesTecnicas(BaseModel):
     tecnologias: List[str] = Field(
-        ...,
-        min_length=1,
-        description="Lista de tecnologías, frameworks o herramientas mencionadas en el texto",
+        description="Tecnologías, frameworks o herramientas mencionadas en el texto"
     )
     nivel_de_criticidad: NivelCriticidad = Field(
-        ...,
-        description="Gravedad del problema o relevancia de la arquitectura descripta",
+        description="Gravedad del problema o relevancia de la arquitectura descrita"
     )
     resumen_tecnico: str = Field(
-        ...,
-        min_length=10,
-        description="Resumen técnico de 1-2 oraciones sobre el contenido del texto",
+        description="Resumen técnico de 1 o 2 oraciones sobre el texto"
     )
-
-    @field_validator("tecnologias")
-    @classmethod
-    def sin_duplicados_ni_vacios(cls, v: List[str]) -> List[str]:
-        limpio = [t.strip() for t in v if t.strip()]
-        if not limpio:
-            raise ValueError(
-                "La lista de tecnologías no puede quedar vacía tras limpiar"
-            )
-        return list(dict.fromkeys(limpio))
