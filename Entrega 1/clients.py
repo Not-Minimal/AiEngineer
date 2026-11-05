@@ -32,7 +32,7 @@ class BaseLLMClient(ABC):
 
 class AnthropicClient(BaseLLMClient):
     def __init__(self, api_key: str, model: str, temperature: float, max_tokens: int):
-        self._client = AsyncAnthropic(api_key=api_key)
+        self._client = AsyncAnthropic(api_key=api_key, max_retries=3)
         self.model = model
         self.temperature = temperature
         self.max_tokens = max_tokens
@@ -127,28 +127,6 @@ class OpenAIClient(BaseLLMClient):
                 model=self.model,
                 content=response.choices[0].message.content or "",
             )
-        except OpenAIRateLimitError as e:
-            return ModelResponse(
-                provider=Provider.OPENAI,
-                model=self.model,
-                content="",
-                error=f"Límite de cuota excedido: {e}",
-            )
-        except OpenAIConnectionError as e:
-            return ModelResponse(
-                provider=Provider.OPENAI,
-                model=self.model,
-                content="",
-                error=f"Error de conexión: {e}",
-            )
-        except OpenAIAPIError as e:
-            return ModelResponse(
-                provider=Provider.OPENAI,
-                model=self.model,
-                content="",
-                error=f"Error de la API de OpenAI: {e}",
-            )
-
         except OpenAIRateLimitError as e:
             return ModelResponse(
                 provider=Provider.OPENAI,
