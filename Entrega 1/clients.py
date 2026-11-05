@@ -10,7 +10,7 @@ from openai import APIError as OpenAIAPIError
 from openai import AsyncOpenAI
 from openai import RateLimitError as OpenAIRateLimitError
 
-from schemas import ChatMessage, ModelResponse, Provider
+from schemas import ChatMessage, LLMConfig, ModelResponse, Provider
 
 
 class BaseLLMClient(ABC):
@@ -45,7 +45,6 @@ class AnthropicClient(BaseLLMClient):
         parametros = {
             "model": self.model,
             "max_tokens": self.max_tokens,  # obligatorio en Anthropic, a diferencia de OpenAI
-            "temperature": self.temperature,
             "messages": conversacion,
         }
         if system:
@@ -166,3 +165,17 @@ class OpenAIClient(BaseLLMClient):
             OpenAIAPIError,
         ) as e:
             yield f"\n[⚠️ Error durante el streaming: {e}]"
+
+
+def create_client(config: LLMConfig) -> BaseLLMClient:
+    """Crea el cliente del proveedor indicado en la configuración."""
+    clientes = {
+        Provider.OPENAI: OpenAIClient,
+        Provider.ANTHROPIC: AnthropicClient,
+    }
+    return clientes[config.provider](
+        api_key=config.api_key.get_secret_value(),
+        model=config.model,
+        temperature=config.temperature,
+        max_tokens=config.max_tokens,
+    )
