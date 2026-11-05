@@ -1,4 +1,4 @@
 openai==3.46.0
 anthropic==2.5.0
 pydantic==2.14.2
-python-dotenv==<tu versión>
+python-dotenv==1.2.4
