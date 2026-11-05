@@ -1,0 +1,22 @@
+[
+  {
+    "pregunta": "¿Cómo devuelvo un error 404 usando HTTPException?",
+    "documento_id_esperado": "tutorial/handling-errors.md"
+  },
+  {
+    "pregunta": "¿Cómo comparto una dependencia con Depends y Annotated?",
+    "documento_id_esperado": "tutorial/dependencies.md"
+  },
+  {
+    "pregunta": "¿Para qué sirve TrustedHostMiddleware?",
+    "documento_id_esperado": "advanced/middleware.md"
+  },
+  {
+    "pregunta": "¿Cómo ejecuto una tarea después de devolver la respuesta al cliente?",
+    "documento_id_esperado": "tutorial/background-tasks.md"
+  },
+  {
+    "pregunta": "¿Cómo recibo datos en el cuerpo de una petición con un modelo?",
+    "documento_id_esperado": "tutorial/body.md"
+  }
+]
