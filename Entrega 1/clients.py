@@ -5,6 +5,10 @@ from anthropic import APIConnectionError as AnthropicConnectionError
 from anthropic import APIError as AnthropicAPIError
 from anthropic import AsyncAnthropic
 from anthropic import RateLimitError as AnthropicRateLimitError
+from openai import APIConnectionError as OpenAIConnectionError
+from openai import APIError as OpenAIAPIError
+from openai import AsyncOpenAI
+from openai import RateLimitError as OpenAIRateLimitError
 
 from schemas import ChatMessage, ModelResponse, Provider
 
@@ -93,5 +97,94 @@ class AnthropicClient(BaseLLMClient):
             AnthropicRateLimitError,
             AnthropicConnectionError,
             AnthropicAPIError,
+        ) as e:
+            yield f"\n[⚠️ Error durante el streaming: {e}]"
+
+
+class OpenAIClient(BaseLLMClient):
+    def __init__(self, api_key: str, model: str, temperature: float, max_tokens: int):
+        self._client = AsyncOpenAI(api_key=api_key, max_retries=3)
+        self.model = model
+        self.temperature = temperature
+        self.max_tokens = max_tokens
+
+    def _preparar_parametros(self, messages: List[ChatMessage]) -> dict:
+        """OpenAI acepta los mensajes system dentro de la lista, no hay que separarlos."""
+        return {
+            "model": self.model,
+            "max_completion_tokens": self.max_tokens,
+            "temperature": self.temperature,
+            "messages": [m.model_dump() for m in messages],
+        }
+
+    async def generate(self, messages: List[ChatMessage]) -> ModelResponse:
+        try:
+            response = await self._client.chat.completions.create(
+                **self._preparar_parametros(messages)
+            )
+            return ModelResponse(
+                provider=Provider.OPENAI,
+                model=self.model,
+                content=response.choices[0].message.content or "",
+            )
+        except OpenAIRateLimitError as e:
+            return ModelResponse(
+                provider=Provider.OPENAI,
+                model=self.model,
+                content="",
+                error=f"Límite de cuota excedido: {e}",
+            )
+        except OpenAIConnectionError as e:
+            return ModelResponse(
+                provider=Provider.OPENAI,
+                model=self.model,
+                content="",
+                error=f"Error de conexión: {e}",
+            )
+        except OpenAIAPIError as e:
+            return ModelResponse(
+                provider=Provider.OPENAI,
+                model=self.model,
+                content="",
+                error=f"Error de la API de OpenAI: {e}",
+            )
+
+        except OpenAIRateLimitError as e:
+            return ModelResponse(
+                provider=Provider.OPENAI,
+                model=self.model,
+                content="",
+                error=f"Límite de cuota excedido: {e}",
+            )
+        except OpenAIConnectionError as e:
+            return ModelResponse(
+                provider=Provider.OPENAI,
+                model=self.model,
+                content="",
+                error=f"Error de conexión: {e}",
+            )
+        except OpenAIAPIError as e:
+            return ModelResponse(
+                provider=Provider.OPENAI,
+                model=self.model,
+                content="",
+                error=f"Error de la API de OpenAI: {e}",
+            )
+
+    async def generate_stream(
+        self, messages: List[ChatMessage]
+    ) -> AsyncGenerator[str, None]:
+        try:
+            stream = await self._client.chat.completions.create(
+                **self._preparar_parametros(messages),
+                stream=True,
+            )
+            async for chunk in stream:
+                if chunk.choices and chunk.choices[0].delta.content:
+                    yield chunk.choices[0].delta.content
+        except (
+            OpenAIRateLimitError,
+            OpenAIConnectionError,
+            OpenAIAPIError,
         ) as e:
             yield f"\n[⚠️ Error durante el streaming: {e}]"
