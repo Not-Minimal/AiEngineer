@@ -1,0 +1,188 @@
+{
+  "multi_paso": {
+    "thread_id": "memoria-20261105-204834",
+    "pregunta": "¿Cuántos pedidos tuvo Ana García y cuál fue el total?",
+    "pasos": [
+      {
+        "tipo": "usuario",
+        "contenido": "¿Cuántos pedidos tuvo Ana García y cuál fue el total?"
+      },
+      {
+        "tipo": "accion",
+        "herramienta": "buscar_cliente_por_nombre",
+        "argumentos": {
+          "nombre": "Ana García"
+        }
+      },
+      {
+        "tipo": "observacion",
+        "herramienta": "buscar_cliente_por_nombre",
+        "contenido": "Cliente encontrado: 'Ana García' -> cliente_id=102"
+      },
+      {
+        "tipo": "accion",
+        "herramienta": "buscar_pedidos",
+        "argumentos": {
+          "cliente_id": 102
+        }
+      },
+      {
+        "tipo": "observacion",
+        "herramienta": "buscar_pedidos",
+        "contenido": "pedidos=3, total=$14500"
+      },
+      {
+        "tipo": "respuesta",
+        "contenido": "Ana García tuvo 3 pedidos y el total gastado fue de $14,500."
+      }
+    ],
+    "llamadas_a_herramientas": 2
+  },
+  "memoria_mismo_hilo": {
+    "thread_id": "memoria-20261105-204834",
+    "pregunta": "¿Y Juan Pérez?",
+    "pasos": [
+      {
+        "tipo": "usuario",
+        "contenido": "¿Y Juan Pérez?"
+      },
+      {
+        "tipo": "accion",
+        "herramienta": "buscar_cliente_por_nombre",
+        "argumentos": {
+          "nombre": "Juan Pérez"
+        }
+      },
+      {
+        "tipo": "observacion",
+        "herramienta": "buscar_cliente_por_nombre",
+        "contenido": "Cliente encontrado: 'Juan Pérez' -> cliente_id=205"
+      },
+      {
+        "tipo": "accion",
+        "herramienta": "buscar_pedidos",
+        "argumentos": {
+          "cliente_id": 205
+        }
+      },
+      {
+        "tipo": "observacion",
+        "herramienta": "buscar_pedidos",
+        "contenido": "pedidos=1, total=$3200"
+      },
+      {
+        "tipo": "respuesta",
+        "contenido": "Juan Pérez tuvo 1 pedido y el total gastado fue de $3,200."
+      }
+    ],
+    "llamadas_a_herramientas": 2
+  },
+  "memoria_comparacion": {
+    "thread_id": "memoria-20261105-204834",
+    "pregunta": "¿Quién de los dos gastó más?",
+    "pasos": [
+      {
+        "tipo": "usuario",
+        "contenido": "¿Quién de los dos gastó más?"
+      },
+      {
+        "tipo": "respuesta",
+        "contenido": "Ana García gastó $14,500, mientras que Juan Pérez gastó $3,200. Por lo tanto, Ana García gastó más."
+      }
+    ],
+    "llamadas_a_herramientas": 0
+  },
+  "control_otro_hilo": {
+    "thread_id": "control-20261105-204834",
+    "pregunta": "¿Quién de los dos gastó más?",
+    "pasos": [
+      {
+        "tipo": "usuario",
+        "contenido": "¿Quién de los dos gastó más?"
+      },
+      {
+        "tipo": "respuesta",
+        "contenido": "Por favor, proporciona los nombres completos de las dos personas que deseas comparar para saber quién gastó más."
+      }
+    ],
+    "llamadas_a_herramientas": 0
+  },
+  "reintento": {
+    "thread_id": "reintento-20261105-204834",
+    "pregunta": "¿Cuánto gastó en total Maria Lopes?",
+    "pasos": [
+      {
+        "tipo": "usuario",
+        "contenido": "¿Cuánto gastó en total Maria Lopes?"
+      },
+      {
+        "tipo": "accion",
+        "herramienta": "buscar_cliente_por_nombre",
+        "argumentos": {
+          "nombre": "Maria Lopes"
+        }
+      },
+      {
+        "tipo": "observacion",
+        "herramienta": "buscar_cliente_por_nombre",
+        "contenido": "ERROR: no existe el cliente 'Maria Lopes'. Sugerencia: 'maría lópez'."
+      },
+      {
+        "tipo": "accion",
+        "herramienta": "buscar_cliente_por_nombre",
+        "argumentos": {
+          "nombre": "maría lópez"
+        }
+      },
+      {
+        "tipo": "observacion",
+        "herramienta": "buscar_cliente_por_nombre",
+        "contenido": "Cliente encontrado: 'maría lópez' -> cliente_id=310"
+      },
+      {
+        "tipo": "accion",
+        "herramienta": "buscar_pedidos",
+        "argumentos": {
+          "cliente_id": 310
+        }
+      },
+      {
+        "tipo": "observacion",
+        "herramienta": "buscar_pedidos",
+        "contenido": "pedidos=5, total=$27800"
+      },
+      {
+        "tipo": "respuesta",
+        "contenido": "María López gastó un total de $27,800 en 5 pedidos."
+      }
+    ],
+    "llamadas_a_herramientas": 3
+  },
+  "aclaracion": {
+    "thread_id": "aclaracion-20261105-204834",
+    "pregunta": "¿Cuántos pedidos tuvo Roberto Sánchez?",
+    "pasos": [
+      {
+        "tipo": "usuario",
+        "contenido": "¿Cuántos pedidos tuvo Roberto Sánchez?"
+      },
+      {
+        "tipo": "accion",
+        "herramienta": "buscar_cliente_por_nombre",
+        "argumentos": {
+          "nombre": "Roberto Sánchez"
+        }
+      },
+      {
+        "tipo": "observacion",
+        "herramienta": "buscar_cliente_por_nombre",
+        "contenido": "ERROR: no existe el cliente 'Roberto Sánchez' y no hay nombres parecidos."
+      },
+      {
+        "tipo": "respuesta",
+        "contenido": "No he encontrado un cliente con el nombre \"Roberto Sánchez\". ¿Podrías verificar si el nombre es correcto o proporcionar un nombre alternativo?"
+      }
+    ],
+    "llamadas_a_herramientas": 1
+  }
+}

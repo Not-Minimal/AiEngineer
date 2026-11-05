@@ -1,0 +1,5 @@
+.env
+.venv/
+checkpoints.sqlite*
+__pycache__/
+.DS_Store
