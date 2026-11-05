@@ -42,3 +42,23 @@ def get_model(provider: str):
     if provider == "anthropic":
         return ChatAnthropic(model="claude-haiku-5-5", max_tokens=1024, max_retries=0)
     raise ValueError(f"Proveedor no soportado: {provider}")
+
+
+class RespuestaIncompleta(Exception):
+    """El modelo cortó la respuesta o no devolvió un objeto."""
+
+
+def validar_salida(salida: dict) -> EntidadesTecnicas:
+    """Revisa la respuesta cruda y devuelve el objeto validado."""
+    metadata = salida["raw"].response_metadata
+    motivo = metadata.get("finish_reason") or metadata.get("stop_reason")
+
+    if motivo in ("length", "max_tokens"):
+        raise RespuestaIncompleta(f"Respuesta cortada por límite de tokens ({motivo})")
+    if salida["parsing_error"]:
+        raise salida["parsing_error"]
+    if salida["parsed"] is None:
+        raise RespuestaIncompleta("El modelo no devolvió un objeto")
+
+    logger.info("Validación correcta")
+    return salida["parsed"]
