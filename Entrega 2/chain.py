@@ -99,3 +99,18 @@ def build_chain(provider: str = "openai"):
         retry_if_exception_type=debe_reintentar,
         stop_after_attempt=3,
     )
+
+async def process_text(text: str, provider: str = "openai") -> EntidadesTecnicas:
+    """Extrae las entidades técnicas de un texto y devuelve el objeto validado."""
+    chain = build_chain(provider)
+    logger.info("[%s] Procesando texto (%d caracteres)", provider, len(text))
+
+    try:
+        resultado = await chain.ainvoke(
+            {"texto": text, "instrucciones_formato": INSTRUCCIONES_FORMATO}
+        )
+        logger.info("[%s] Extracción validada: %s", provider, resultado.model_dump())
+        return resultado
+    except Exception as e:
+        logger.error("[%s] Falló (%s): %s", provider, type(e).__name__, e)
+        raise
