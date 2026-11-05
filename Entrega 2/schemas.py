@@ -28,7 +28,6 @@ class EntidadesTecnicas(BaseModel):
         if not limpias:
             raise ValueError("tecnologias debe incluir al menos una tecnología")
         return list(dict.fromkeys(limpias))
-        limpio = v.strip()
 
     @field_validator("resumen_tecnico")
     @classmethod
