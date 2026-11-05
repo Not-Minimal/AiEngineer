@@ -1,11 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from anthropic import APIConnectionError as AnthropicConnectionError
-from anthropic import APIError as AnthropicAPIError
-from anthropic import AsyncAnthropic
-from anthropic import RateLimitError as AnthropicRateLimitError
-from pydantic import BaseModel, Field, SecretStr, ValidationError, field_validator
+from pydantic import BaseModel, Field, SecretStr, field_validator
 
 
 class Provider(str, Enum):
