@@ -1,39 +1,37 @@
 from enum import Enum
-from typing import Optional
+from typing import List
 
-from pydantic import BaseModel, Field, SecretStr, field_validator
-
-
-class Provider(str, Enum):
-    ANTHROPIC = "anthropic"
-    OPENAI = "openai"
+from pydantic import BaseModel, Field, field_validator
 
 
-class ChatMessage(BaseModel):
-    role: str = Field(description="'user', 'assistant' o 'system'")
-    content: str
+class NivelCriticidad(str, Enum):
+    BAJA = "baja"
+    MEDIA = "media"
+    ALTA = "alta"
 
-    @field_validator("role")
+
+class EntidadesTecnicas(BaseModel):
+    tecnologias: List[str] = Field(
+        ...,
+        min_length=1,
+        description="Lista de tecnologías, frameworks o herramientas mencionadas en el texto",
+    )
+    nivel_de_criticidad: NivelCriticidad = Field(
+        ...,
+        description="Gravedad del problema o relevancia de la arquitectura descripta",
+    )
+    resumen_tecnico: str = Field(
+        ...,
+        min_length=10,
+        description="Resumen técnico de 1-2 oraciones sobre el contenido del texto",
+    )
+
+    @field_validator("tecnologias")
     @classmethod
-    def rol_valido(cls, v: str) -> str:
-        roles_permitidos = {"user", "assistant", "system"}
-        if v not in roles_permitidos:
+    def sin_duplicados_ni_vacios(cls, v: List[str]) -> List[str]:
+        limpio = [t.strip() for t in v if t.strip()]
+        if not limpio:
             raise ValueError(
-                f"role debe ser uno de {roles_permitidos}, recibido: '{v}'"
+                "La lista de tecnologías no puede quedar vacía tras limpiar"
             )
-        return v
-
-
-class LLMConfig(BaseModel):
-    provider: Provider
-    model: str
-    api_key: SecretStr
-    temperature: float = Field(default=0.7, ge=0, le=2)
-    max_tokens: int = Field(default=1024, gt=0)
-
-
-class ModelResponse(BaseModel):
-    provider: Provider
-    model: str
-    content: str
-    error: Optional[str] = None
+        return list(dict.fromkeys(limpio))
