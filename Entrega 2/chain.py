@@ -62,3 +62,29 @@ def validar_salida(salida: dict) -> EntidadesTecnicas:
 
     logger.info("Validación correcta")
     return salida["parsed"]
+
+ERRORES_REINTENTABLES = (
+    ValidationError,
+    OutputParserException,
+    RespuestaIncompleta,
+    LengthFinishReasonError,
+    OpenAIConnectionError,
+    OpenAIRateLimitError,
+    OpenAIServerError,
+    AnthropicConnectionError,
+    AnthropicRateLimitError,
+    AnthropicServerError,
+)
+
+
+def debe_reintentar(error: BaseException) -> bool:
+    """Reintenta formato y transporte; los errores permanentes, como un 401, no."""
+    reintentable = isinstance(error, ERRORES_REINTENTABLES)
+    logger.warning(
+        "Intento fallido (%s), reintentable: %s", type(error).__name__, reintentable
+    """Reintenta formato y transporte; los errores permanentes, como un 401, no."""
+    reintentable = isinstance(error, ERRORES_REINTENTABLES)
+    logger.warning(
+        "Intento fallido (%s), reintentable: %s", type(error).__name__, reintentable
+    )
+    return reintentable
