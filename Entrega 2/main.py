@@ -1,51 +1,37 @@
 import asyncio
+import logging
 import os
 
+from chain import process_text
 from dotenv import load_dotenv
 
-from clients import BaseLLMClient, create_client
-from schemas import ChatMessage, LLMConfig, Provider
+TEXTO_EJEMPLO = (
+    "Nuestra API en FastAPI está devolviendo timeouts intermitentes. El caché en Redis "
+    "parece saturarse en picos de tráfico y las conexiones a PostgreSQL se agotan "
+    "porque el pool está mal dimensionado. Esto está afectando a usuarios en producción."
+)
+TEXTO_AMBIGUO = "El sistema anda medio raro últimamente, no sé bien qué está pasando."
 
-PREGUNTA = "¿Qué es la entropía?"
-
-
-async def probar_cliente(client: BaseLLMClient, messages: list[ChatMessage]) -> None:
-    print("\nModo normal:")
-    respuesta = await client.generate(messages)
-    if respuesta.error:
-        print(f"⚠️ {respuesta.error}")
-    else:
-        print(respuesta.content)
-
-    print("\nModo streaming:")
-    async for token in client.generate_stream(messages):
-        print(token, end="", flush=True)
-    print()
+PROVEEDORES = [("openai", "OPENAI_API_KEY"), ("anthropic", "ANTHROPIC_API_KEY")]
 
 
 async def main() -> None:
     load_dotenv()
+    logging.basicConfig(level=logging.INFO)
 
-    proveedores = [
-        (Provider.OPENAI, "OPENAI_API_KEY", os.getenv("OPENAI_MODEL", "gpt-4o-mini")),
-        (
-            Provider.ANTHROPIC,
-            "ANTHROPIC_API_KEY",
-            os.getenv("ANTHROPIC_MODEL", "claude-haiku-5-5"),
-        ),
-    ]
-    messages = [ChatMessage(role="user", content=PREGUNTA)]
+    for provider, variable_clave in PROVEEDORES:
+        print(f"\n===== {provider} =====")
 
-    for provider, variable_clave, model in proveedores:
-        print(f"\n===== {provider.value} ({model}) =====")
-
-        api_key = os.getenv(variable_clave)
-        if not api_key:
+        if not os.getenv(variable_clave):
             print(f"Se omite: falta {variable_clave} en el .env")
             continue
 
-        config = LLMConfig(provider=provider, model=model, api_key=api_key)
-        await probar_cliente(create_client(config), messages)
+        for texto in (TEXTO_EJEMPLO, TEXTO_AMBIGUO):
+            try:
+                resultado = await process_text(texto, provider)
+                print(resultado.model_dump_json(indent=2))
+            except Exception as e:
+                print(f"⚠️ No se pudo procesar ({type(e).__name__}): {e}")
 
 
 if __name__ == "__main__":

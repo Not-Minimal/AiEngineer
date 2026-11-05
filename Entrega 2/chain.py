@@ -63,6 +63,7 @@ def validar_salida(salida: dict) -> EntidadesTecnicas:
     logger.info("Validación correcta")
     return salida["parsed"]
 
+
 ERRORES_REINTENTABLES = (
     ValidationError,
     OutputParserException,
@@ -82,10 +83,6 @@ def debe_reintentar(error: BaseException) -> bool:
     reintentable = isinstance(error, ERRORES_REINTENTABLES)
     logger.warning(
         "Intento fallido (%s), reintentable: %s", type(error).__name__, reintentable
-    """Reintenta formato y transporte; los errores permanentes, como un 401, no."""
-    reintentable = isinstance(error, ERRORES_REINTENTABLES)
-    logger.warning(
-        "Intento fallido (%s), reintentable: %s", type(error).__name__, reintentable
     )
     return reintentable
 
@@ -99,6 +96,7 @@ def build_chain(provider: str = "openai"):
         retry_if_exception_type=debe_reintentar,
         stop_after_attempt=3,
     )
+
 
 async def process_text(text: str, provider: str = "openai") -> EntidadesTecnicas:
     """Extrae las entidades técnicas de un texto y devuelve el objeto validado."""

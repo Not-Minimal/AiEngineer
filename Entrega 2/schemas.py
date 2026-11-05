@@ -20,3 +20,20 @@ class EntidadesTecnicas(BaseModel):
     resumen_tecnico: str = Field(
         description="Resumen técnico de 1 o 2 oraciones sobre el texto"
     )
+
+    @field_validator("tecnologias")
+    @classmethod
+    def tecnologias_validas(cls, v: List[str]) -> List[str]:
+        limpias = [t.strip() for t in v if t.strip()]
+        if not limpias:
+            raise ValueError("tecnologias debe incluir al menos una tecnología")
+        return list(dict.fromkeys(limpias))
+        limpio = v.strip()
+
+    @field_validator("resumen_tecnico")
+    @classmethod
+    def resumen_valido(cls, v: str) -> str:
+        limpio = v.strip()
+        if len(limpio) < 10:
+            raise ValueError("resumen_tecnico debe tener al menos 10 caracteres")
+        return limpio
