@@ -31,3 +31,14 @@ prompt = ChatPromptTemplate.from_messages(
         ("human", "{texto}"),
     ]
 )
+
+
+def get_model(provider: str):
+    """Crea el modelo del proveedor indicado."""
+    if provider == "openai":
+        return ChatOpenAI(
+            model="gpt-4o-mini", temperature=0, max_tokens=1024, max_retries=0
+        )
+    if provider == "anthropic":
+        return ChatAnthropic(model="claude-haiku-5-5", max_tokens=1024, max_retries=0)
+    raise ValueError(f"Proveedor no soportado: {provider}")
