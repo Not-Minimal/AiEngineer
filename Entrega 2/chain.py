@@ -88,3 +88,14 @@ def debe_reintentar(error: BaseException) -> bool:
         "Intento fallido (%s), reintentable: %s", type(error).__name__, reintentable
     )
     return reintentable
+
+
+def build_chain(provider: str = "openai"):
+    """Compone prompt -> modelo con salida estructurada -> validación, con reintentos."""
+    model = get_model(provider)
+    structured_model = model.with_structured_output(EntidadesTecnicas, include_raw=True)
+
+    return (prompt | structured_model | validar_salida).with_retry(
+        retry_if_exception_type=debe_reintentar,
+        stop_after_attempt=3,
+    )
