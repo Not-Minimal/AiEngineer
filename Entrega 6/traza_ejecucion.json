@@ -1,0 +1,80 @@
+{
+  "investigar_y_analizar": {
+    "pregunta": "¿Cuántas órdenes de trabajo y cuántos pesos en transacciones registra Tallertrack en promedio por taller activo?",
+    "recorrido": [
+      {
+        "nodo": "supervisor",
+        "paso": 1,
+        "decision": "investigador",
+        "instruccion": "Busca el número total de órdenes de trabajo y el total de pesos en transacciones que registra Tallertrack, así como el número de talleres activos. Asegúrate de incluir las fuentes de los datos.",
+        "razon": "[investigador] Se necesita información factual para poder realizar cálculos posteriores, cumpliendo con la Rúbrica de Validación en la parte de cobertura."
+      },
+      {
+        "nodo": "investigador",
+        "herramientas": [
+          "buscar_en_base_conocimiento",
+          "buscar_en_base_conocimiento",
+          "buscar_en_base_conocimiento"
+        ],
+        "contenido": "- Tallertrack registra más de 99.954 órdenes de trabajo [02_productos_principales.md].\n- Tallertrack tiene más de 15 talleres activos [02_productos_principales.md].\n- Tallertrack registra 10 mil millones de pesos chilenos en transacciones [02_productos_principales.md]."
+      },
+      {
+        "nodo": "supervisor",
+        "paso": 2,
+        "decision": "analista",
+        "instruccion": "Calcula el promedio de órdenes de trabajo y el promedio de pesos en transacciones por taller activo, utilizando los datos proporcionados: más de 99.954 órdenes de trabajo, más de 15 talleres activos y 10 mil millones de pesos en transacciones.",
+        "razon": "[analista] Se requiere un análisis de los datos proporcionados por el investigador para calcular promedios, cumpliendo con la Rúbrica de Validación en los criterios de cobertura y trazabilidad."
+      },
+      {
+        "nodo": "analista",
+        "herramientas": [
+          "calcular",
+          "calcular"
+        ],
+        "contenido": "(1) Datos de entrada utilizados:\n- Órdenes de trabajo: 99.954\n- Talleres activos: 15\n- Pesos en transacciones: 10.000.000.000\n\n(2) Cálculos realizados:\n- Promedio de órdenes de trabajo por taller activo: \n  - \\( 99954 / 15 = 6663.6 \\)\n  \n- Promedio de pesos en transacciones por taller activo: \n  - \\( 10000000000 / 15 = 666666666.6667 \\)\n\n(3) Conclusión breve:\nTallertrack registra un promedio de aproximadamente 6.663,6 órdenes de trabajo y 666.666.666,67 pesos en transacciones por cada taller activo."
+      },
+      {
+        "nodo": "supervisor",
+        "paso": 3,
+        "decision": "FINISH",
+        "instruccion": "",
+        "razon": "[FINISH] La solicitud ha sido completamente atendida. Se han proporcionado hechos y cálculos que cumplen con la rúbrica de validación: cobertura, trazabilidad, cálculos y honestidad."
+      },
+      {
+        "nodo": "sintetizador"
+      }
+    ],
+    "respuesta_final": "Tallertrack registra un promedio de aproximadamente 6.663,6 órdenes de trabajo y 666.666.666,67 pesos en transacciones por cada taller activo. Estos datos se basan en más de 99.954 órdenes de trabajo, más de 15 talleres activos y 10 mil millones de pesos chilenos en transacciones."
+  },
+  "dato_inexistente": {
+    "pregunta": "¿Cuántos usuarios activos tiene VertiTrack y cuál es su ingreso mensual por usuario?",
+    "recorrido": [
+      {
+        "nodo": "supervisor",
+        "paso": 1,
+        "decision": "investigador",
+        "instruccion": "Busca el número de usuarios activos de VertiTrack y su ingreso mensual por usuario, incluyendo las fuentes de información.",
+        "razon": "[investigador] Es necesario que el investigador busque hechos y cifras en la base de conocimiento para responder a la solicitud del usuario."
+      },
+      {
+        "nodo": "investigador",
+        "herramientas": [
+          "buscar_en_base_conocimiento",
+          "buscar_en_base_conocimiento"
+        ],
+        "contenido": "- NO ENCONTRADO: usuarios activos VertiTrack\n- NO ENCONTRADO: ingreso mensual por usuario VertiTrack"
+      },
+      {
+        "nodo": "supervisor",
+        "paso": 2,
+        "decision": "FINISH",
+        "instruccion": "",
+        "razon": "[FINISH] Ambos datos solicitados fueron marcados como NO ENCONTRADO por el investigador, por lo que no se puede proceder con el análisis ni cálculos. Se finaliza la tarea."
+      },
+      {
+        "nodo": "sintetizador"
+      }
+    ],
+    "respuesta_final": "NO ENCONTRADO: usuarios activos VertiTrack.  \nNO ENCONTRADO: ingreso mensual por usuario VertiTrack."
+  }
+}
