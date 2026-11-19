@@ -1,0 +1,19 @@
+# API y cola
+fastapi==0.165.0
+uvicorn==0.54.0
+redis==8.1.0
+httpx==0.28.1
+python-dotenv==1.2.4
+pydantic==2.14.4
+
+# Orquestador multi-agente (Entrega 6) + checkpoints en Redis
+langchain-core==1.8.4
+langchain-openai==1.8.4
+langgraph==1.2.23
+langgraph-checkpoint-redis==0.6.0
+chromadb==1.5.9
+
+# Observabilidad: Arize Phoenix vía OpenInference / OpenTelemetry
+arize-phoenix-otel==0.17.3
+openinference-instrumentation-langchain==0.1.88
+opentelemetry-api==1.45.2
